@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
      * binding object. It's defined at this level because it will
      * be used across multiple methods in MainActivity class.
      */
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,25 +41,26 @@ class MainActivity : AppCompatActivity() {
         binding.calculateButton.setOnClickListener { calculateTip() }
     }
 
-    fun calculateTip() {
+    private fun calculateTip() {
         // Saves the input as an String variable
         val stringInTextView = binding.costOfService.text.toString()
         // Then convert the input to a Double
-        val cost = stringInTextView.toDouble()
+        val cost = stringInTextView.toDoubleOrNull()
+        if (cost == null) {
+            binding.tipResult.text = ""
+            return
+        }
         // Get the selected radiobutton
-        val selectedId = binding.tipOptions.checkedRadioButtonId
         // Then store the percentage of that option
-        val tipPercentage = when (selectedId) {
+        val tipPercentage = when (binding.tipOptions.checkedRadioButtonId) {
             R.id.option_twenty_percent -> 0.20
             R.id.option_eighteen_percent -> 0.18
             else -> 0.15
         }
         // Calculate the tip
         var tip = tipPercentage * cost
-        // Check if the round up switch is on/off
-        val roundUp = binding.roundUpSwitch.isChecked
         // Round up the tip if the switch is on
-        if (roundUp) {
+        if (binding.roundUpSwitch.isChecked) {
             tip = ceil(tip)
         }
         // Convert to use a currency instance to display the cost
