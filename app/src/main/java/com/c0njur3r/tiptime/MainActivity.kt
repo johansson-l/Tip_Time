@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun calculateTip() {
         // Saves the input as an String variable
-        val stringInTextView = binding.costOfService.text.toString()
+        val stringInTextView = binding.costOfService.toString()
         // Then convert the input to a Double
         val cost = stringInTextView.toDoubleOrNull()
         if (cost == null) {
